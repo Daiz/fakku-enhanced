@@ -5,6 +5,8 @@
 // @version      1.0.0
 // @description  Better Fakku tag sorting and additional field highlighting.
 // @match        https://www.fakku.net/*
+// @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
+// @downloadURL  https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
