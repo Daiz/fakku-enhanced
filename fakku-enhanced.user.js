@@ -178,7 +178,7 @@
     publishers: createList("Publishers"),
     magazines: createList("Magazines"),
     artists: createList("Artists"),
-    tags: createList("Tags"),
+    tags: createList("Tags")
   };
 
   if (followPage) {
