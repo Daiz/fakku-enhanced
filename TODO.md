@@ -2,6 +2,13 @@
 - TODO: Remove section headers on Following page if section becomes empty
 - TODO: window.postMessage across tabs to update attribute listing status
 - TODO: Customizable highlight colors (editable on attribute page & following list)
+- TODO: Add development watcher
+  * Local script creates websocket server
+  * Generates watcher script that subscribers to websocket server
+  * Watcher script is installed on UserScript manager
+  * Listens for update notifications
+  * On update, reload if document.hidden is false
+  * Otherwise wait on document visibilitychange
 - TODO: Continue reading & Last Read information
   * Keep track of last page visited in reader
   * Keep track if last page has been reached in reader
