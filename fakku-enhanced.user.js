@@ -219,4 +219,14 @@
     });
   }
   //#endregion
+  //#region Move collection/chapter listing above comments
+  const collection = d.querySelector("#content-collections");
+  const chapters = d.querySelector("#chapters");
+  const comments = d.querySelector("#comments");
+  const content = collection || chapters;
+  if (content && comments) {
+    const parent = comments.parentElement;
+    parent.insertBefore(content, comments);
+  }
+  //#endregion
 })();
