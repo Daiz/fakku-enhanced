@@ -2,7 +2,7 @@
 // @name         Fakku Enhanced
 // @author       Daiz
 // @namespace    daiz
-// @version      1.1.1
+// @version      1.1.3
 // @description  Enhances Fakku with various small features.
 // @match        https://www.fakku.net/*
 // @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
