@@ -2,7 +2,7 @@
 // @name         Fakku Enhanced
 // @author       Daiz
 // @namespace    daiz
-// @version      1.1.0
+// @version      1.1.1
 // @description  Enhances Fakku with various small features.
 // @match        https://www.fakku.net/*
 // @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
@@ -198,8 +198,8 @@
   const lists = {
     publishers: createList("Publishers"),
     magazines: createList("Magazines"),
-    artists: createList("Artists"),
-    tags: createList("Tags")
+    tags: createList("Tags"),
+    artists: createList("Artists")
   };
 
   if (followPage) {
