@@ -2,7 +2,7 @@
 // @name         Fakku Enhanced
 // @author       Daiz
 // @namespace    daiz
-// @version      1.0.0
+// @version      1.1.0
 // @description  Better Fakku tag sorting and additional field highlighting.
 // @match        https://www.fakku.net/*
 // @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
