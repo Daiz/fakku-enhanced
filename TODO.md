@@ -5,6 +5,7 @@
 - TODO: List "main" content tags first - anal|bondage|cheating|chikan|crossdressing|femdom|forced|futanari|genderbend|group|harem|loli|netorare|pegging|pregnant|shota|tentacles|vanilla|yaoi|yuri
 - TODO: Add anime|ecchi|non-h|dubbed|subbed|censored|illustration|spread|interview|slice-of-life|western to back tags
 - TODO: Color tag should colorize Pages field / add (full color) to it
+- TODO: Give different color background for stuff you need to buy (Purchase label)
 - TODO: Tag categories (WIP listing)
   * sex: anal|blowjob|bondage
   * body: bakunyuu|booty|
