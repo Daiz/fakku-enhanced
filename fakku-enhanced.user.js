@@ -3,13 +3,31 @@
 // @author       Daiz
 // @namespace    daiz
 // @version      1.1.0
-// @description  Better Fakku tag sorting and additional field highlighting.
+// @description  Enhances Fakku with various small features.
 // @match        https://www.fakku.net/*
 // @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
 // @downloadURL  https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
+
+/*
+  Fakku Enhanced - Enhances Fakku with various small features.
+  Copyright (C) 2018 Daiz
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 (function() {
   "use strict";
@@ -119,7 +137,10 @@
     if (index > -1) {
       followed.splice(findFollowed(type, attribute), 1);
       storage.setItem(STORE_KEY, JSON.stringify(followed));
-      console.log("[FE] removed from followed attributes:", `${type}/${attribute}`);
+      console.log(
+        "[FE] removed from followed attributes:",
+        `${type}/${attribute}`
+      );
     }
   }
 
