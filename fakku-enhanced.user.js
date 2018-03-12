@@ -48,6 +48,7 @@
   //#region Sort tags by followed first
   function sortTags(meta) {
     const tags = meta.querySelector(".tags");
+    if (!tags) return;
     const subbed = [];
     const rest = [];
     const back = [];
@@ -168,7 +169,7 @@
     [].slice.call(meta.querySelectorAll(".row")).forEach(row => {
       const rowType = row.querySelector(".row-left").textContent.toLowerCase();
       if (!rowType || rowType.match(/pages|tags|description/)) return;
-      const attrs = row.querySelector(".row-right").children;
+      const attrs = row.querySelectorAll(".row-right > a");
       [].slice.call(attrs).forEach(a => {
         const match = a.href.match(IS_ATTRIBUTE);
         if (match) {
