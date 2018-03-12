@@ -1,18 +1,18 @@
 // ==UserScript==
-// @name         Fakku Enhanced
+// @name         FAKKU Experiments
 // @author       Daiz
 // @namespace    daiz
 // @version      1.1.3
-// @description  Enhances Fakku with various small features.
+// @description  Experimental frontend features for FAKKU.
 // @match        https://www.fakku.net/*
-// @updateURL    https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
-// @downloadURL  https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js
+// @updateURL    https://github.com/Daiz/fakku-experiments/raw/stable/fakku-experiments.user.js
+// @downloadURL  https://github.com/Daiz/fakku-experiments/raw/stable/fakku-experiments.user.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
 
 /*
-  Fakku Enhanced - Enhances Fakku with various small features.
+  FAKKU Experiments - Experimental frontend features for FAKKU.
   Copyright (C) 2018 Daiz
 
   This program is free software: you can redistribute it and/or modify
