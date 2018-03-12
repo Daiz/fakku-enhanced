@@ -2,7 +2,7 @@
   "name": "fakku-enhanced",
   "version": "1.0.0",
   "author": "Daiz",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "description": "Better Fakku attribute sorting and highlighting.",
   "main": "fakku-enhanced.user.js",
   "scripts": {
