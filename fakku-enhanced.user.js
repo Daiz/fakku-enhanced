@@ -52,7 +52,7 @@
     const rest = [];
     const back = [];
     const frag = d.createDocumentFragment();
-    const backTag = /hentai|uncensored|book|subscription|doujin/;
+    const backTag = /hentai|uncensored|book|subscription|doujin|anime|ecchi|non-h|dubbed|subbed|censored|illustration|spread|interview|western/;
 
     function createTag(name, subscribed, back) {
       const a = d.createElement("a");
