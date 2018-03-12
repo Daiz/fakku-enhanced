@@ -1,11 +1,13 @@
 # FAKKU Experiments
 
-**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU](https://www.fakku.net) *(NSFW)*.
+**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU!](https://www.fakku.net) *(nsfw)*
 
 ## Installation
 
 1. Install [Tampermonkey](http://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/).
-2. **[Install the script by clicking here.](https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js)**
+2. Click the install link below.
+
+### [**INSTALL THE USERSCRIPT**](https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js)
 
 ## Available Experiments
 
