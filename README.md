@@ -10,5 +10,5 @@
 ## Features
 
 - Sorts tags so that followed tags are always listed first, while common tags *(hentai, uncensored, subscription, doujin, book)* are always listed last.
-- Adds highlights for followed artists, magazines and publishers (you will need to visit your [Following](https://www.fakku.net/account/following) page to initialize this, as the script can't know the followed status of non-tag attributes from listings alone).
+- Adds highlights for followed artists, magazines and publishers. **You will need to visit your [Following](https://www.fakku.net/account/following) page to initialize this, as the script can't know the followed status of non-tag attributes from listings alone.**
 - Moves collection/chapter listing above comments.
