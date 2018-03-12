@@ -6,7 +6,9 @@
   "description": "Better Fakku attribute sorting and highlighting.",
   "main": "fakku-enhanced.user.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "cross-env VERSION=$npm_package_version npm run release:git",
+    "release:git": "cross-env-shell git tag -af stable -m \"$VERSION\""
   },
   "repository": {
     "type": "git",
@@ -19,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/Daiz/fakku-enhanced/issues"
   },
-  "homepage": "https://github.com/Daiz/fakku-enhanced#readme"
+  "homepage": "https://github.com/Daiz/fakku-enhanced#readme",
+  "devDependencies": {
+    "cross-env": "^5.1.4"
+  }
 }
