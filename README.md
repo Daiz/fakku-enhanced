@@ -1,6 +1,6 @@
 # FAKKU Experiments
 
-**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU](https://www.fakku.net).
+**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU](https://www.fakku.net) *(NSFW)*.
 
 ## Installation
 
