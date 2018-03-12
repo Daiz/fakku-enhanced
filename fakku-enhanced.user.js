@@ -40,6 +40,10 @@
   const FOLLOW_PAGE = "https://www.fakku.net/account/following";
   const STORE_KEY = "fakku-enhanced-subscribed";
   const metadata = [].slice.call(d.querySelectorAll(".content-meta"));
+  const metablock = d.querySelector(".content-right");
+  if (metablock) {
+    metadata.push(metablock);
+  }
 
   //#region Sort tags by followed first
   function sortTags(meta) {
