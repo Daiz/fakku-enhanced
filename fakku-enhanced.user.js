@@ -110,7 +110,7 @@
     if (findFollowed(type, attribute) === -1) {
       followed.push([type, attribute]);
       storage.setItem(STORE_KEY, JSON.stringify(followed));
-      console.log("[FE] added to followed attributes:", type, "/", attribute);
+      console.log("[FE] added to followed attributes:", `${type}/${attribute}`);
     }
   }
 
@@ -119,12 +119,7 @@
     if (index > -1) {
       followed.splice(findFollowed(type, attribute), 1);
       storage.setItem(STORE_KEY, JSON.stringify(followed));
-      console.log(
-        "[FE] removed from followed attributes:",
-        type,
-        "/",
-        attribute
-      );
+      console.log("[FE] removed from followed attributes:", `${type}/${attribute}`);
     }
   }
 
