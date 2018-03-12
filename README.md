@@ -5,4 +5,4 @@
 ## Installation
 
 1. Install [Tampermonkey](http://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/).
-2. Install the script.
+2. **[Install the script by clicking here.](https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js)**
