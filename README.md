@@ -2,10 +2,6 @@
 
 **FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU](https://www.fakku.net).
 
-## Why Userscript?
-
-Userscript gives me full freedom to do whatever I want however I want and whenever I want, and it's primary purpose is to test and develop feature proposals for the site proper. I also have a soft spot for userscripts in general considering my whole career basically got started by editing and developing userscripts!
-
 ## Installation
 
 1. Install [Tampermonkey](http://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/).
@@ -22,3 +18,7 @@ Userscript gives me full freedom to do whatever I want however I want and whenev
 Currently there is only tag group, which is called the "category" tags. In the future this will likely be replaced with full-blown tag groups, but for now, this moves the various format descriptions to the back while bringing the actual content tags to the front.
 
 - **category:** hentai, ecchi, non-h, anime, illustration, spread, interview, western, uncensored, censored, subscription, doujin, book, dubbed, subbed
+
+## Why Userscript?
+
+Userscript gives me full freedom to do whatever I want however I want and whenever I want, and it's primary purpose is to test and develop feature proposals for the site proper. I also have a soft spot for userscripts in general considering my whole career basically got started by editing and developing userscripts!
