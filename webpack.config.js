@@ -1,9 +1,9 @@
 const { CheckerPlugin } = require("awesome-typescript-loader");
 const { resolve, join, dirname, basename } = require("path");
 const { DefinePlugin } = require("webpack");
-const { main } = require("./package.json");
-const dir = dirname(main);
-const file = basename(main);
+const pkg = require("./package.json");
+const dir = dirname(pkg.main);
+const file = basename(pkg.main);
 
 module.exports = {
   entry: {
