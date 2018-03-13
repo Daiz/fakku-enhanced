@@ -4,14 +4,20 @@ const development = require("./us-development");
 const webpack = require("webpack");
 const { resolve } = require("path");
 const WebSocket = require("ws");
+const pkg = require("./package.json");
 const config = require("./webpack.config.js");
 config.mode = "development";
-const pkg = require("./package.json");
-const DEV = "development.user.js";
+config.plugins.push(
+  new webpack.BannerPlugin({
+    banner: "var PRODUCTION = false;",
+    raw: true
+  })
+);
 
 const HOST = process.env.npm_package_config_host || pkg.config.host;
 const PORT = process.env.npm_package_config_port || pkg.config.port;
 const FILE = pkg.main;
+const DEV = "development.user.js";
 
 let filePath = resolve(FILE).replace(/\\/g, "/");
 if (filePath[0] !== "/") filePath = "/" + filePath;

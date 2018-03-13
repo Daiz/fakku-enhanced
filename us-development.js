@@ -58,6 +58,8 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-init();
+if (!PRODUCTION) {
+  init();
+}
 `;
 };
