@@ -11,6 +11,7 @@
     "name": "FAKKU Experiments"
   },
   "scripts": {
+    "start": "node watch",
     "build": "webpack -p",
     "lint": "tslint --type-check --project tsconfig.json \"src/**/*.ts*\"",
     "precommit": "lint-staged",
