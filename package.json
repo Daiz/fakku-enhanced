@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "fakku-experiments",
   "description": "Experimental frontend features for FAKKU.",
   "license": "AGPL-3.0-only",
