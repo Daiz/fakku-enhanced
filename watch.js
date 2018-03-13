@@ -4,14 +4,16 @@ const development = require("./us-development");
 const webpack = require("webpack");
 const { resolve } = require("path");
 const WebSocket = require("ws");
-const config = require("./webpack.config.dev.js");
+const config = require("./webpack.config.js");
+config.mode = "development";
+const pkg = require("./package.json");
 
-const HOST = process.env.npm_package_config_host || "localhost";
-const PORT = process.env.npm_package_config_port || 8080;
-const FILE = process.env.npm_package_config_main;
+const HOST = process.env.npm_package_config_host || pkg.config.host;
+const PORT = process.env.npm_package_config_port || pkg.config.port;
+const FILE = pkg.main;
 
 let filePath = resolve(FILE).replace(/\\/g, "/");
-if (path[0] !== "/") filePath = "/" + filePath;
+if (filePath[0] !== "/") filePath = "/" + filePath;
 filePath = encodeURI("file://" + filePath).replace(/[?#]/g, encodeURIComponent);
 
 ShellString(`

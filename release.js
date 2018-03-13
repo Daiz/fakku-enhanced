@@ -11,6 +11,7 @@ const path = resolve(pkg.main);
 const compile = promisify(webpack);
 const args = process.argv.slice(2);
 delete config.devtool;
+config.mode = "production";
 
 async function build(version = pkg.version) {
   await compile(config);
@@ -31,7 +32,7 @@ async function build(version = pkg.version) {
       exec(`git add ${pkg.main} && git commit -m "${update}"`);
       exec(`git tag -a v${update} -m "${update}"`);
       exec(`git tag -af stable -m "${update}"`);
-      // exec(`git push && git push --tags --force`);
+      exec(`git push && git push --tags --force`);
     } else {
       await build();
       console.log("Compiled successfully.");
