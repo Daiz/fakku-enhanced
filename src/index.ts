@@ -4,7 +4,7 @@ const storage = w.localStorage;
 const IS_MAGAZINE = /comic-bavel|comic-europa|comic-kairakuten|comic-x-eros|girls-form/;
 const IS_ATTRIBUTE = /\/(magazines|publishers|artists)\/([^\/]*)$/;
 const FOLLOW_PAGE = "https://www.fakku.net/account/following";
-const STORE_KEY = "fakku-enhanced-subscribed";
+const STORE_FOLLOWED = `${STORE_KEY}-followed`;
 const metadata = [].slice.call(d.querySelectorAll(".content-meta"));
 const metablock = d.querySelector(".content-right");
 if (metablock) {
@@ -69,7 +69,7 @@ function sortTags(meta: Element) {
 metadata.forEach(sortTags);
 //#endregion
 //#region Highlight followed artist/publisher/magazine attributes
-const stored = storage.getItem(STORE_KEY);
+const stored = storage.getItem(STORE_FOLLOWED);
 const followed = stored ? JSON.parse(stored) : [];
 const match = location.href.match(IS_ATTRIBUTE);
 
@@ -100,7 +100,7 @@ function findFollowed(sType: string, sAttribute: string) {
 function addFollowed(type: string, attribute: string) {
   if (findFollowed(type, attribute) === -1) {
     followed.push([type, attribute]);
-    storage.setItem(STORE_KEY, JSON.stringify(followed));
+    storage.setItem(STORE_FOLLOWED, JSON.stringify(followed));
     console.log("[FE] added to followed attributes:", `${type}/${attribute}`);
   }
 }
@@ -109,7 +109,7 @@ function removeFollowed(type: string, attribute: string) {
   const index = findFollowed(type, attribute);
   if (index > -1) {
     followed.splice(findFollowed(type, attribute), 1);
-    storage.setItem(STORE_KEY, JSON.stringify(followed));
+    storage.setItem(STORE_FOLLOWED, JSON.stringify(followed));
     console.log(
       "[FE] removed from followed attributes:",
       `${type}/${attribute}`
