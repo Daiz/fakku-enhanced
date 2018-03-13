@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 80,
+  "files.insertFinalNewline": true,
+  "tslint.autoFixOnSave": true,
+  "files.exclude": {
+    "data/": true,
+    "dist/": true,
+    "node_modules/": true
+  }
+}
