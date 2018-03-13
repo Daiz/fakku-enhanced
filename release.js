@@ -27,11 +27,13 @@ async function build(version = pkg.version) {
     const update = semver.inc(version, bump);
     if (update) {
       pkg.version = update;
+      const dist = pkg.main;
+      const ver = update;
+      const package = "package.json";
       ShellString(pretty.format(pkg)).to("package.json");
       await build(update);
-      exec(`git add ${pkg.main} && git commit -m "${update}"`);
-      exec(`git tag -a v${update} -m "${update}"`);
-      exec(`git tag -af stable -m "${update}"`);
+      exec(`git add ${dist} ${package} && git commit -m "Release ${ver}"`);
+      exec(`git tag -a v${ver} -m "${ver}" && git tag -af stable -m "${ver}"`);
       exec(`git push && git push --tags --force`);
     } else {
       await build();
