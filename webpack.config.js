@@ -1,5 +1,6 @@
 const { CheckerPlugin } = require("awesome-typescript-loader");
 const { resolve, join, dirname, basename } = require("path");
+const { DefinePlugin } = require("webpack");
 const { main } = require("./package.json");
 const dir = dirname(main);
 const file = basename(main);
@@ -39,5 +40,11 @@ module.exports = {
     ]
   },
 
-  plugins: [new CheckerPlugin()]
+  plugins: [
+    new CheckerPlugin(),
+    new DefinePlugin({
+      VERSION: JSON.stringify(pkg.version),
+      STORE_KEY: JSON.stringify(pkg.name)
+    })
+  ]
 };
