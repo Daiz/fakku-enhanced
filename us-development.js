@@ -6,7 +6,10 @@ document.addEventListener("visibilitychange", () => {
   if (!document.hidden && reload) {
     window.reload();
   }
-})
+});
+socket.onopen = (event) => {
+  console.log("Connected to reload server.");
+}
 socket.onmessage = (event) => {
   if (event.data === "reload") {
     if (!document.hidden) {
@@ -17,4 +20,4 @@ socket.onmessage = (event) => {
   }
 }
 `;
-}
+};
