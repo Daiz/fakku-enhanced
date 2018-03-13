@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/node": "^9.4.7",
-    "awesome-typescript-loader": "^4.0.1",
+    "awesome-typescript-loader": "^5.0.0-1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
     "prettier": "^1.11.1",
