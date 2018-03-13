@@ -1,16 +1,18 @@
 module.exports = function(host = "localhost", port = 8080) {
   return `
 const SERVER = "ws://${host}:${port}";
+const TIMEOUT = 10;
 let socket;
 let reload = false;
 let connected = false;
 let timer = null;
+let attempts = 0;
 
 function init() {
   socket = new WebSocket(SERVER);
   socket.onopen = (event) => {
     connected = true;
-    clearInterval(timer);
+    if (timer) clearInterval(timer);
     if (reload) {
       console.log("Reconnected to reload server.");
       if (!document.hidden) {
@@ -33,14 +35,21 @@ function init() {
 }
 
 function reconnect() {
-  console.log("Attempting to reconnect...");
-  init();
+  if (attempts++ < TIMEOUT) {
+    console.log("Attempting to reconnect...");
+    init();
+  } else {
+    console.log("Timed out on reconnect attemption.");
+    clearInterval(timer);
+  }
 }
 
 function close() {
-  connected = false;
   console.error("Disconnected from reload server.");
-  timer = setInterval(reconnect, 2500);
+  if (connected) {
+      timer = setInterval(reconnect, 2500);
+      connected = false;
+  }
 }
 
 document.addEventListener("visibilitychange", () => {
