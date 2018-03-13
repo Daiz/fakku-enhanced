@@ -4,26 +4,56 @@
   "author": "Daiz",
   "license": "AGPL-3.0-only",
   "description": "Experimental frontend features for FAKKU.",
-  "main": "fakku-enhanced.user.js",
+  "main": "dist/fakku-enhanced.user.js",
+  "config": {
+    "host": "localhost",
+    "port": "8080",
+    "name": "FAKKU Experiments"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint --type-check --project tsconfig.json \"src/**/*.ts*\"",
+    "precommit": "lint-staged",
     "release": "cross-env VERSION=$npm_package_version npm run release:git",
-    "release:git": "cross-env-shell git tag -af stable -m \"$VERSION\" && npm run release:push",
+    "release:git":
+      "cross-env-shell git tag -af stable -m \"$VERSION\" && npm run release:push",
     "release:push": "git push && git push --tags --force"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "prettier --parser typescript --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Daiz/fakku-experiments.git"
+    "url": "https://github.com/Daiz/fakku-experiments.git"
   },
-  "keywords": [
-    "fakku",
-    "userscript"
-  ],
+  "keywords": ["fakku", "userscript"],
   "bugs": {
     "url": "https://github.com/Daiz/fakku-experiments/issues"
   },
   "homepage": "https://github.com/Daiz/fakku-experiments#readme",
   "devDependencies": {
-    "cross-env": "^5.1.4"
+    "@types/node": "^9.4.7",
+    "awesome-typescript-loader": "^4.0.1",
+    "cross-env": "^5.1.4",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.11.1",
+    "shelljs": "^0.8.1",
+    "source-map-loader": "^0.2.3",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.10.0",
+    "tslint-config-standard": "^7.0.0",
+    "tslint-language-service": "^0.9.8",
+    "typescript": "^2.7.2",
+    "typestyle": "^1.7.2",
+    "webpack": "^4.1.1",
+    "ws": "^5.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^3.0.3",
+    "utf-8-validate": "^4.0.0"
   }
 }
