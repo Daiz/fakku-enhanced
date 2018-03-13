@@ -15,7 +15,7 @@ if (path[0] !== "/") filePath = "/" + filePath;
 filePath = encodeURI("file://" + filePath).replace(/[?#]/g, encodeURIComponent);
 
 ShellString(`
-${header(false, filePath)}
+${header("DEVELOPMENT", filePath)}
 ${development(HOST, PORT)}
 `).to("development.user.js");
 process.on("exit", () => {
