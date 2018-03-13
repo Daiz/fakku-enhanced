@@ -14,13 +14,13 @@ module.exports = function(VERSION = "DEVELOPMENT", LOCAL) {
 // @version      ${VERSION}
 // @description  ${DESCRIPTION}
 // @match        https://www.fakku.net/*
-${PRODUCTION ? `// @updateURL    ${URL}` : ""}
-${PRODUCTION ? `// @downloadURL  ${URL}` : ""}
 ${
     PRODUCTION
-      ? "// @grant        none"
-      : `// @require      ${LOCAL}\n// @grant        none`
+      ? `// @updateURL    ${URL}
+// @downloadURL  ${URL}`
+      : `// @require      ${LOCAL}`
   }
+// @grant        none
 // @run-at       document-end
 // ==/UserScript==
 /*!
