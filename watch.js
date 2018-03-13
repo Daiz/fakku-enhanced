@@ -7,6 +7,7 @@ const WebSocket = require("ws");
 const config = require("./webpack.config.js");
 config.mode = "development";
 const pkg = require("./package.json");
+const DEV = "development.user.js";
 
 const HOST = process.env.npm_package_config_host || pkg.config.host;
 const PORT = process.env.npm_package_config_port || pkg.config.port;
@@ -19,10 +20,17 @@ filePath = encodeURI("file://" + filePath).replace(/[?#]/g, encodeURIComponent);
 ShellString(`
 ${header("DEVELOPMENT", filePath)}
 ${development(HOST, PORT)}
-`).to("development.user.js");
-process.on("exit", () => {
-  rm("development.user.js");
-});
+`).to(DEV);
+function cleanup() {
+  if (test("-e", DEV)) rm(DEV);
+}
+function cleanupAndExit() {
+  cleanup();
+  process.exit();
+}
+process.on("exit", cleanup);
+process.on("SIGINT", cleanupAndExit);
+process.on("uncaughtException", cleanupAndExit);
 
 const wss = new WebSocket.Server({
   host: HOST,
