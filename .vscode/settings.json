@@ -9,7 +9,9 @@
   "tslint.autoFixOnSave": true,
   "files.exclude": {
     "data/": true,
-    "node_modules/": true
+    "node_modules/": true,
+    "dist/*.map": true,
+    "development.user.js": true
   },
   "[json]": {
     "editor.formatOnSave": false
