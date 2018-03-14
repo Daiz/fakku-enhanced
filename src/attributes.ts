@@ -79,6 +79,7 @@ export class AttributeStore {
   queuedStoreSave: boolean = false;
   queuedPageEnhance: boolean = false;
   queuedFollowingPageUpdate: boolean = false;
+  queuedAttributePageUpdate: boolean = false;
   initialStoreLoad: boolean = true;
   initialPageEnhance: boolean = true;
 
@@ -110,8 +111,34 @@ export class AttributeStore {
     }
   };
 
+  attributePageUpdate = () => {
+    this.queuedAttributePageUpdate = false;
+    const el = $(".attribute-follow > a");
+    const match = location.href.match(ATTRIBUTE);
+    if (el && match) {
+      const [type, name] = parseAttr(match);
+      const attr = this.getAttr(type, name);
+      const icon = $("i", el)!;
+      if (attr && attr.following === true) {
+        el.classList.remove("js-subscribe");
+        el.classList.remove("light");
+        el.classList.add("js-unsubscribe");
+        el.classList.add("pushed");
+        icon.classList.remove("bt-bell");
+        icon.classList.add("bt-check");
+      } else {
+        el.classList.remove("js-unsubscribe");
+        el.classList.remove("pushed");
+        el.classList.add("js-subscribe");
+        el.classList.add("light");
+        icon.classList.remove("bt-check");
+        icon.classList.add("bt-bell");
+      }
+      this.queuePageEnhance();
+    }
+  };
+
   attributePageObserver = (ms: MutationRecord[]) => {
-    debug.log(ms);
     ms.forEach(m => {
       const a = m.target as HTMLAnchorElement;
       const match = location.href.match(ATTRIBUTE);
@@ -263,8 +290,12 @@ export class AttributeStore {
     if (update) {
       this.queueStoreUpdate();
     }
-    if (location.href === FOLLOW_PAGE && !this.initialStoreLoad) {
-      this.queueFollowingPageUpdate();
+    if (!this.initialStoreLoad) {
+      if (location.href === FOLLOW_PAGE) {
+        this.queueFollowingPageUpdate();
+      } else if (ATTRIBUTE.test(location.href)) {
+        this.queueAttributePageUpdate();
+      }
     } else {
       this.queuePageEnhance();
     }
@@ -353,7 +384,7 @@ export class AttributeStore {
   };
 
   queueStoreSave = () => {
-    // debug.log("Queueing store save");
+    // debug.log("Queueing Store Save");
     if (!this.queuedStoreSave) {
       this.queuedStoreSave = true;
       requestAnimationFrame(this.storeSave);
@@ -361,7 +392,7 @@ export class AttributeStore {
   };
 
   queueStoreUpdate = () => {
-    debug.log("Queuing store update");
+    debug.log("Queuing Store Update");
     if (!this.queuedStoreUpdate) {
       this.queuedStoreUpdate = true;
       requestAnimationFrame(this.storeUpdate);
@@ -369,7 +400,7 @@ export class AttributeStore {
   };
 
   queuePageEnhance = () => {
-    debug.log("Queuing page enhance");
+    debug.log("Queuing Page Enhance");
     if (!this.queuedPageEnhance) {
       this.queuedPageEnhance = true;
       requestAnimationFrame(this.pageEnhance);
@@ -377,10 +408,18 @@ export class AttributeStore {
   };
 
   queueFollowingPageUpdate = () => {
-    debug.log("Queuing following page update");
+    debug.log("Queuing Following Page Update");
     if (!this.queuedFollowingPageUpdate) {
       this.queuedFollowingPageUpdate = true;
       requestAnimationFrame(this.followingPageUpdate);
+    }
+  };
+
+  queueAttributePageUpdate = () => {
+    debug.log("Queuing Attribute Page Update");
+    if (!this.queuedAttributePageUpdate) {
+      this.queuedAttributePageUpdate = true;
+      requestAnimationFrame(this.attributePageUpdate);
     }
   };
 
