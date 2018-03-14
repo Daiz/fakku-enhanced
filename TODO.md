@@ -1,6 +1,3 @@
-* TODO: Update tag listing status on follow
-* TODO: Remove section headers on Following page if section becomes empty
-* TODO: window.postMessage across tabs to update attribute listing status
 * TODO: Customizable highlight colors (editable on attribute page & following list)
 * TODO: Highlight search terms/tags
 * TODO: Continue reading & Last Read information
