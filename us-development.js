@@ -24,13 +24,15 @@ function init() {
   };
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    if (data === "reload") {
+    if (data.success) {
       if (!document.hidden) {
         location.reload();
       } else {
         reload = true;
       }
     } else {
+      if (data.error) console.error(data.error);
+      if (data.errorDetails) console.error(data.errorDetails);
       if (data.errors) console.error(data.errors);
       if (data.warnings) console.warn(data.warnings);
       console.log("Not reloaded due to errors or warnings.");

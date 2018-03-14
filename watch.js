@@ -49,33 +49,33 @@ compiler.watch(
     ignored: /node_modules/
   },
   (err, stats) => {
+    let data = { success: true };
     if (err) {
       console.error(err.stack || err);
       if (err.details) {
         console.error(err.details);
       }
+      data.error = err.stack || err;
+      if (err.details) data.errorDetails = err.details;
+      data.success = false;
     }
     const info = stats.toJson();
-    let error = false;
 
     if (stats.hasErrors()) {
       console.error(info.errors);
-      error = { errors: info.errors };
+      data.errors = info.errors;
+      data.success = false;
     }
 
     if (stats.hasWarnings()) {
       console.warn(info.warnings);
-      if (error) error.warnings = info.warnings;
-      else error = { warnings: warnings };
+      data.warnings = info.warnings;
+      data.success = false;
     }
 
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        if (error) {
-          client.send(JSON.stringify(error));
-        } else {
-          client.send("reload");
-        }
+        client.send(JSON.stringify(data));
       }
     });
   }
