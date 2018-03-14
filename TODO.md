@@ -1,5 +1,4 @@
 * TODO: Customizable highlight colors (editable on attribute page & following list)
-* TODO: Don't reload on compilation errors, send errors to web console log
 * TODO: Highlight search terms/tags
 * TODO: Continue reading & Last Read information
   * Keep track of last page visited in reader
