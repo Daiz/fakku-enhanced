@@ -1,4 +1,4 @@
-import { $$, $, Maybe, cleanEl, debug } from "./util";
+import { $$, $, Maybe, cleanEl, debug, Queryable } from "./util";
 
 const d = document;
 const w = window;
@@ -41,6 +41,28 @@ function parseAttr(match: RegExpMatchArray): [string, string] {
   return [type, name];
 }
 
+function createList(title: string) {
+  const frag = d.createDocumentFragment();
+  const li = d.createElement("li");
+  li.id = `header-${title.toLowerCase()}`;
+  li.style.border = "0";
+  li.style.padding = "0";
+  li.innerHTML = `<h2>${title}</h2>`;
+  frag.appendChild(li);
+  return frag;
+}
+
+interface FragMap {
+  [key: string]: DocumentFragment;
+}
+
+type SortableFrag = [number, DocumentFragment];
+type SortableFrags = SortableFrag[];
+
+function sortFrags(a: SortableFrag, b: SortableFrag) {
+  return a[0] - b[0];
+}
+
 const STORE_LOCATION = `${STORE_KEY}-followed`;
 
 const FOLLOW_PAGE = "https://www.fakku.net/account/following";
@@ -56,6 +78,8 @@ export class AttributeStore {
   queuedStoreUpdate: boolean = false;
   queuedStoreSave: boolean = false;
   queuedPageEnhance: boolean = false;
+  queuedFollowingPageUpdate: boolean = false;
+  initialStoreLoad: boolean = true;
   initialPageEnhance: boolean = true;
 
   init = () => {
@@ -75,11 +99,11 @@ export class AttributeStore {
       debug.log("Monitoring attribute page follow button");
       mo.observe(el, { attributes: true });
       if (el.classList.contains("js-unsubscribe")) {
-        if (this.setAttr(type, name, true, Color.Null)) {
+        if (this.setAttr(type, name, true)) {
           this.queuePageEnhance();
         }
       } else if (el.classList.contains("js-subscribe")) {
-        if (this.setAttr(type, name, false, Color.Null)) {
+        if (this.setAttr(type, name, false)) {
           this.queuePageEnhance();
         }
       }
@@ -94,11 +118,11 @@ export class AttributeStore {
       if (match) {
         const [type, name] = parseAttr(match);
         if (a.classList.contains("js-unsubscribe")) {
-          if (this.setAttr(type, name, true, Color.Null)) {
+          if (this.setAttr(type, name, true)) {
             this.queuePageEnhance();
           }
         } else if (a.classList.contains("js-subscribe")) {
-          if (this.setAttr(type, name, false, Color.Null)) {
+          if (this.setAttr(type, name, false)) {
             this.queuePageEnhance();
           }
         }
@@ -107,11 +131,110 @@ export class AttributeStore {
   };
 
   followingPageInit = () => {
-    //
+    const lists: FragMap = {
+      publishers: createList("Publishers"),
+      developers: createList("Developers"),
+      magazines: createList("Magazines"),
+      series: createList("Series"),
+      tags: createList("Tags"),
+      artists: createList("Artists"),
+      circles: createList("Circles"),
+      events: createList("Events")
+    };
+
+    const order: SortableFrags = [];
+
+    const followList = $(".following-list");
+    if (followList) {
+      this.followingPageParser(d, lists);
+      for (let name in lists) {
+        const list = lists[name];
+        const len = list.children.length;
+        if (len > 1) {
+          order.push([len, list]);
+        }
+      }
+      order.sort(sortFrags).forEach(frag => {
+        followList.appendChild(frag[1]);
+      });
+      const mo = new MutationObserver(this.followingPageObserver);
+      mo.observe(followList, { childList: true });
+    }
+  };
+
+  followingPageParser = (doc: Queryable, lists?: FragMap) => {
+    const list = $(".following-list", doc);
+    if (list) {
+      const follows = $$("li", list);
+      const followed: string[] = [];
+      follows.forEach(el => {
+        const a = $("a", el)! as HTMLAnchorElement;
+        const match = a ? a.href.match(ATTRIBUTE) : null;
+        if (match) {
+          const [type, name] = parseAttr(match);
+          followed.push(`${type}/${name}`);
+          const attr = this.getAttr(type, name);
+          const color = attr ? attr.color : Color.Null;
+          this.setAttr(type, name, true, color);
+          if (lists) lists[type].appendChild(el);
+        } else {
+          if (lists) {
+            // remove headers on reruns
+            const parent = el.parentElement;
+            if (parent) parent.removeChild(el);
+          }
+        }
+      });
+      this.store.forEach(attr => {
+        if (followed.indexOf(`${attr.type}/${attr.name}`) === -1) {
+          // we do not outright remove stored attributes in order
+          // to keep their color in store if later refollowed
+          this.setAttr(attr.type, attr.name, false);
+        }
+      });
+      debug.log("Store updated");
+      return true;
+    } else {
+      debug.error("Unable to parse following list");
+      return false;
+    }
+  };
+
+  followingPageUpdate = () => {
+    this.queuedFollowingPageUpdate = false;
+    const changes = {
+      removed: [] as [string, string][],
+      added: [] as [string, string][]
+    };
+
+    location.reload();
+    if (changes.added.length > 0) {
+      // if attributes added, reload
+    } else if (changes.removed.length > 0) {
+      // if attributes removed, remove
+    }
   };
 
   followingPageObserver = (ms: MutationRecord[]) => {
-    //
+    ms.forEach(m => {
+      Array.prototype.slice.call(m.removedNodes).forEach((el: Element) => {
+        const a = $("a", el) as HTMLAnchorElement;
+        const match = a ? a.href.match(ATTRIBUTE) : "";
+        if (match) {
+          const [type, name] = parseAttr(match);
+          this.setAttr(type, name, false);
+          const count = this.getAttrTypeFollowedCount(type);
+          if (count === 0) {
+            debug.log("removing header for", type);
+            const header = $(`#header-${type}`);
+            if (header) {
+              const parent = header.parentElement;
+              if (parent) parent.removeChild(header);
+            }
+          }
+        }
+      });
+    });
   };
 
   storeSave = () => {
@@ -123,14 +246,14 @@ export class AttributeStore {
         updated: Date.now()
       })
     );
-    debug.log("[FE] Saved store to localStorage");
+    debug.log("Saved store to localStorage");
   };
 
   storeLoad = () => {
     const stored = localStorage.getItem(STORE_LOCATION);
     let update = true;
     if (stored) {
-      debug.log("[FE] Loaded store from localStorage");
+      debug.log("Loaded store from localStorage");
       const { store, updated } = JSON.parse(stored);
       const date = new Date(updated);
       const now = Date.now();
@@ -140,14 +263,19 @@ export class AttributeStore {
     if (update) {
       this.queueStoreUpdate();
     }
-    this.queuePageEnhance();
+    if (location.href === FOLLOW_PAGE && !this.initialStoreLoad) {
+      this.queueFollowingPageUpdate();
+    } else {
+      this.queuePageEnhance();
+    }
+    this.initialStoreLoad = false;
   };
 
   setAttr = (
     type: string,
     name: string,
     following: boolean,
-    color = Color.Green
+    color = Color.Null
   ): boolean => {
     let save = true;
     const attr = this.getAttr(type, name);
@@ -157,7 +285,7 @@ export class AttributeStore {
         attr.color === Color.Null ||
         (color !== Color.Null && attr.color !== color);
       if (!followUpdate && !colorUpdate) {
-        debug.log(`[FE] Attribute "${type}/${name}": Nothing changed:`, attr);
+        debug.log(`Attribute "${type}/${name}": Nothing changed:`, attr);
         save = false; // nothing changed, no need to save
       } else {
         if (attr.color === Color.Null && color === attr.color) {
@@ -165,7 +293,7 @@ export class AttributeStore {
           color = Color.Green;
         }
         debug.log(
-          `[FE] Attribute "${type}/${name}": ${
+          `Attribute "${type}/${name}": ${
             followUpdate
               ? `Changed 'following': ${attr.following} -> ${following} | `
               : ""
@@ -177,7 +305,7 @@ export class AttributeStore {
     } else {
       color = color === Color.Null ? Color.Green : color;
       debug.log(
-        `[FE] Attribute "${type}/${name}": Added with 'following': ${following} and 'color': ${color}`
+        `Attribute "${type}/${name}": Added with 'following': ${following} and 'color': ${color}`
       );
       this.store.push({
         type,
@@ -200,47 +328,32 @@ export class AttributeStore {
     }
   };
 
+  getAttrTypeFollowedCount = (type: string): number => {
+    const store = this.store;
+    let count = 0;
+    for (let i = 0; i < store.length; ++i) {
+      const attr = store[i];
+      if (attr.type === type && attr.following === true) ++count;
+    }
+    return count;
+  };
+
   storeUpdate = async () => {
     this.queuedStoreUpdate = false;
-    debug.log("[FE] Updating store via Following page fetch");
+    debug.log("Updating store via Following page fetch");
     try {
       const res = await fetch(FOLLOW_PAGE, { credentials: "include" });
       const doc = d.createElement("html");
       doc.innerHTML = await res.text();
-      const list = $(".following-list", doc);
-      if (list) {
-        const follows = $$("li", list);
-        const followed: string[] = [];
-        follows.forEach(el => {
-          const a = $("a", el)! as HTMLAnchorElement;
-          const match = a.href.match(ATTRIBUTE);
-          if (match) {
-            const [type, name] = parseAttr(match);
-            followed.push(`${type}/${name}`);
-            const attr = this.getAttr(type, name);
-            const color = attr ? attr.color : Color.Green;
-            this.setAttr(type, name, true, color);
-          }
-        });
-        this.store.forEach(attr => {
-          if (followed.indexOf(`${attr.type}/${attr.name}`) === -1) {
-            // we do not outright remove stored attributes in order
-            // to keep their color in store if later refollowed
-            this.setAttr(attr.type, attr.name, false, Color.Null);
-          }
-        });
-        debug.log("[FE] Store updated");
-        this.queuePageEnhance();
-      } else {
-        throw new Error("[FE] Unable to load following list.");
-      }
+      const success = this.followingPageParser(doc);
+      if (success) this.queuePageEnhance();
     } catch (e) {
       debug.error(e);
     }
   };
 
   queueStoreSave = () => {
-    debug.log("[FE] Queueing store save");
+    // debug.log("Queueing store save");
     if (!this.queuedStoreSave) {
       this.queuedStoreSave = true;
       requestAnimationFrame(this.storeSave);
@@ -248,7 +361,7 @@ export class AttributeStore {
   };
 
   queueStoreUpdate = () => {
-    debug.log("[FE] Queuing store update");
+    debug.log("Queuing store update");
     if (!this.queuedStoreUpdate) {
       this.queuedStoreUpdate = true;
       requestAnimationFrame(this.storeUpdate);
@@ -256,16 +369,24 @@ export class AttributeStore {
   };
 
   queuePageEnhance = () => {
-    debug.log("[FE] Queuing page enhance");
+    debug.log("Queuing page enhance");
     if (!this.queuedPageEnhance) {
       this.queuedPageEnhance = true;
       requestAnimationFrame(this.pageEnhance);
     }
   };
 
+  queueFollowingPageUpdate = () => {
+    debug.log("Queuing following page update");
+    if (!this.queuedFollowingPageUpdate) {
+      this.queuedFollowingPageUpdate = true;
+      requestAnimationFrame(this.followingPageUpdate);
+    }
+  };
+
   pageEnhance = () => {
     this.queuedPageEnhance = false;
-    console.log("[FE] Enhancing page");
+    console.log("Enhancing page");
     const metadata = $$(".content-meta");
     const metablock = $(".content-right");
     if (metablock) metadata.push(metablock);
@@ -291,7 +412,7 @@ export class AttributeStore {
                 // discrepancy detected between stored state and backend state,
                 // so we do a full update of store based on the following page
                 console.log("discrepancy update", type, name, backendFollow);
-                this.setAttr(type, name, backendFollow, Color.Null);
+                this.setAttr(type, name, backendFollow);
                 // this.queueStoreUpdate();
               }
             }
