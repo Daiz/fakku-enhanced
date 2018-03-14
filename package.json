@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/Daiz/fakku-experiments/issues"
   },
-  "version": "1.1.4",
+  "version": "1.2.0",
   "main": "dist/fakku-experiments.user.js",
   "scripts": {
     "build": "node release",
