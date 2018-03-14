@@ -195,8 +195,8 @@ export class AttributeStore {
       const follows = $$("li", list);
       const followed: string[] = [];
       follows.forEach(el => {
-        const a = $("a", el)! as HTMLAnchorElement;
-        const match = a ? a.href.match(ATTRIBUTE) : null;
+        const a = $("a", el);
+        const match = a ? (a as HTMLAnchorElement).href.match(ATTRIBUTE) : null;
         if (match) {
           const [type, name] = parseAttr(match);
           followed.push(`${type}/${name}`);
@@ -207,8 +207,7 @@ export class AttributeStore {
         } else {
           if (lists) {
             // remove headers on reruns
-            const parent = el.parentElement;
-            if (parent) parent.removeChild(el);
+            list.removeChild(el);
           }
         }
       });
@@ -231,14 +230,58 @@ export class AttributeStore {
     this.queuedFollowingPageUpdate = false;
     const changes = {
       removed: [] as [string, string][],
-      added: [] as [string, string][]
+      added: [] as [string, string][],
+      removedTypes: {} as { [key: string]: true }
     };
 
-    location.reload();
+    const store = this.store;
+    const followList = $(".following-list")!;
+    const entries: string[] = $$("li", followList)
+      .filter(el => {
+        return $("a", el);
+      })
+      .map(el => {
+        const a = $("a", el)! as HTMLAnchorElement;
+        const match = a.href.match(ATTRIBUTE)!;
+        const [type, name] = parseAttr(match);
+        const attr = this.getAttr(type, name);
+        if (!attr || attr.following === false) {
+          changes.removed.push([type, name]);
+        }
+        return type + "/" + name;
+      });
+    store.forEach(attr => {
+      const isListed = entries.indexOf(`${attr.type}/${attr.name}`) === -1;
+      if (attr.following === true && isListed) {
+        changes.added.push([attr.type, attr.name]);
+      }
+    });
+
     if (changes.added.length > 0) {
       // if attributes added, reload
+      location.reload();
     } else if (changes.removed.length > 0) {
-      // if attributes removed, remove
+      // if attributes removed, remove them from the list
+      changes.removed.forEach(attr => {
+        const [type, name] = attr;
+        const el = $(`a[href="/${type}/${name}"]`, followList);
+        changes.removedTypes[type] = true;
+        if (el) {
+          const li = el.parentNode!;
+          followList.removeChild(li);
+        }
+      });
+
+      // remove type header if entries in attribute type hit 0 after removals
+      for (let type in changes.removedTypes) {
+        const count = this.getAttrTypeFollowedCount(type);
+        if (count === 0) {
+          const el = $(`#header-${type}`, followList);
+          if (el) {
+            followList.removeChild(el);
+          }
+        }
+      }
     }
   };
 
@@ -316,7 +359,7 @@ export class AttributeStore {
         attr.color === Color.Null ||
         (color !== Color.Null && attr.color !== color);
       if (!followUpdate && !colorUpdate) {
-        debug.log(`Attribute "${type}/${name}": Nothing changed:`, attr);
+        // debug.log(`Attribute "${type}/${name}": Nothing changed:`, attr);
         save = false; // nothing changed, no need to save
       } else {
         if (attr.color === Color.Null && color === attr.color) {
@@ -425,7 +468,7 @@ export class AttributeStore {
 
   pageEnhance = () => {
     this.queuedPageEnhance = false;
-    console.log("Enhancing page");
+    debug.log("Enhancing page");
     const metadata = $$(".content-meta");
     const metablock = $(".content-right");
     if (metablock) metadata.push(metablock);
