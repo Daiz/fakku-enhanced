@@ -80,8 +80,6 @@ export class AttributeStore {
   queuedPageEnhance: boolean = false;
   queuedFollowingPageUpdate: boolean = false;
   queuedAttributePageUpdate: boolean = false;
-  initialStoreLoad: boolean = true;
-  initialPageEnhance: boolean = true;
 
   init = () => {
     this.storeLoad();
@@ -319,21 +317,21 @@ export class AttributeStore {
     debug.log("Saved store to localStorage");
   };
 
-  storeLoad = () => {
+  storeLoad = (update?: number | Event) => {
     const stored = localStorage.getItem(STORE_LOCATION);
-    let update = true;
+    let storeUpdate = true;
     if (stored) {
       debug.log("Loaded store from localStorage");
       const { store, updated } = JSON.parse(stored);
       const date = new Date(updated);
       const now = Date.now();
       this.store = store;
-      if (date.getTime() >= now - UPDATE_INTERVAL) update = false;
+      if (date.getTime() >= now - UPDATE_INTERVAL) storeUpdate = false;
     }
-    if (update) {
+    if (storeUpdate) {
       this.queueStoreUpdate();
     }
-    if (!this.initialStoreLoad) {
+    if (update) {
       if (location.href === FOLLOW_PAGE) {
         this.queueFollowingPageUpdate();
       } else if (ATTRIBUTE.test(location.href)) {
@@ -342,7 +340,6 @@ export class AttributeStore {
     } else {
       this.queuePageEnhance();
     }
-    this.initialStoreLoad = false;
   };
 
   setAttr = (
@@ -466,7 +463,7 @@ export class AttributeStore {
     }
   };
 
-  pageEnhance = () => {
+  pageEnhance = (update?: number) => {
     this.queuedPageEnhance = false;
     debug.log("Enhancing page");
     const metadata = $$(".content-meta");
@@ -487,15 +484,15 @@ export class AttributeStore {
             const [type, name] = parseAttr(match);
             const isTag = type === "tags";
             const attr = this.getAttr(type, name);
-            if (isTag && this.initialPageEnhance) {
+            if (isTag && !update) {
               const backendFollow = a.classList.contains("subscribed");
               const storedFollow = attr ? attr.following : false;
               if (backendFollow !== storedFollow) {
                 // discrepancy detected between stored state and backend state,
                 // so we do a full update of store based on the following page
-                console.log("discrepancy update", type, name, backendFollow);
+                debug.log("discrepancy update", type, name, backendFollow);
                 this.setAttr(type, name, backendFollow);
-                // this.queueStoreUpdate();
+                this.queueStoreUpdate();
               }
             }
             if (attr && attr.following === true) {
@@ -518,7 +515,6 @@ export class AttributeStore {
             }
           }
         });
-        this.initialPageEnhance = false;
         // sort tags into categories
         if (rowType === "Tags") {
           const tagList = $(".tags", row)!;
