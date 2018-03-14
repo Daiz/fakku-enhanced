@@ -1,25 +1,27 @@
 # FAKKU Experiments
 
-**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU!](https://www.fakku.net) *(nsfw)*
+**FAKKU Experiments** is a userscript for experimental frontend features on [FAKKU!](https://www.fakku.net) _(nsfw)_
 
 ## Installation
 
-1. Install [Tampermonkey](http://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/).
-2. Click the install link below.
+1.  Install [Tampermonkey](http://tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/).
+2.  Click the install link below.
 
-### [**INSTALL THE USERSCRIPT**](https://github.com/Daiz/fakku-enhanced/raw/stable/fakku-enhanced.user.js)
+### [**INSTALL THE USERSCRIPT**](https://github.com/Daiz/fakku-experiments/raw/stable/dist/fakku-experiments.user.js)
 
 ## Available Experiments
 
-- Sort tags so that followed tags are always listed first, while category tags are always listed last.
-- Add highlights for followed artists, magazines and publishers. **You will need to visit your [Following](https://www.fakku.net/account/following) page to initialize this, as the script can't know the followed status of non-tag attributes from listings alone.**
-- Move collection/chapter listing above comments.
+* Sort tags so that followed tags are always listed first, while category tags are always listed last.
+* Add highlights for all types of attributes that you can follow (artists, magazines, publishers, etc).
+* Sort attributes into categories in your [Following](https://www.fakku.net/account/following) page.
+* Update attribute highlights dynamically across tabs and windows as they change.
+* Move collection/chapter listing above comments.
 
 ## Tag Groups
 
 Currently there is only tag group, which is called the "category" tags. In the future this will likely be replaced with full-blown tag groups, but for now, this moves the various format descriptions to the back while bringing the actual content tags to the front.
 
-- **category:** hentai, ecchi, non-h, anime, illustration, spread, interview, western, uncensored, censored, subscription, doujin, book, dubbed, subbed
+* **category:** hentai, ecchi, non-h, anime, illustration, spread, interview, western, uncensored, censored, subscription, doujin, book, dubbed, subbed
 
 ## Why Userscript?
 
