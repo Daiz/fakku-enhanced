@@ -21,7 +21,7 @@ ${
       : `// @require      ${LOCAL}`
   }
 // @grant        none
-// @run-at       document-end
+// @run-at       document-start
 // ==/UserScript==
 /*!
   ${NAME} - ${DESCRIPTION}
