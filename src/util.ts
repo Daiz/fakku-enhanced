@@ -1,5 +1,5 @@
 const d = document;
-interface Queryable {
+export interface Queryable {
   querySelector: typeof d.querySelector;
   querySelectorAll: typeof d.querySelectorAll;
 }
@@ -23,10 +23,26 @@ export function log(...args: any[]) {
 }
 
 const DEBUG = true;
+const PREFIX = "[FE]";
 export const debug = {
-  log: (...args: any[]) => DEBUG && console.log.apply(console, args),
-  error: (...args: any[]) => DEBUG && console.error.apply(console, args),
-  trace: (...args: any[]) => DEBUG && console.trace.apply(console, args)
+  log: (...args: any[]) => {
+    if (DEBUG) {
+      args.unshift(PREFIX);
+      console.log.apply(console, args);
+    }
+  },
+  error: (...args: any[]) => {
+    if (DEBUG) {
+      args.unshift(PREFIX);
+      console.error.apply(console, args);
+    }
+  },
+  trace: (...args: any[]) => {
+    if (DEBUG) {
+      args.unshift(PREFIX);
+      console.error.apply(console, args);
+    }
+  }
 };
 
 export type Maybe<T> = T | undefined;
