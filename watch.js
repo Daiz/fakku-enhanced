@@ -56,18 +56,26 @@ compiler.watch(
       }
     }
     const info = stats.toJson();
+    let error = false;
 
     if (stats.hasErrors()) {
       console.error(info.errors);
+      error = { errors: info.errors };
     }
 
     if (stats.hasWarnings()) {
       console.warn(info.warnings);
+      if (error) error.warnings = info.warnings;
+      else error = { warnings: warnings };
     }
 
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send("reload");
+        if (error) {
+          client.send(JSON.stringify(error));
+        } else {
+          client.send("reload");
+        }
       }
     });
   }
